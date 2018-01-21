@@ -2,6 +2,7 @@
 Helper functions
 """
 from typing import Union
+from hashlib import sha256
 import hmac
 import base64
 
@@ -25,7 +26,7 @@ def hmac_sha256_base64(key: BYTES_OR_STR, msg: BYTES_OR_STR,
     hmac_obj = hmac.new(
         key=key,
         msg=msg,
-        digestmod='sha256'
+        digestmod=sha256
     )
     return base64.b64encode(
         hmac_obj.digest()

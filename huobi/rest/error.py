@@ -17,7 +17,7 @@ class HuobiRestRequstError(HuobiRestError):
     pass
 
 
-class HuobRestiApiError(HuobiRestError):
+class HuobiRestiApiError(HuobiRestError):
     """
     Huobi server returned errors
     """
