@@ -1,5 +1,5 @@
 """
-class of Huobi restful api client, market related endpoints
+class of Huobi restful api client, common endpoints
 """
 from huobi.rest.endpoints import HuobiRestClientBase
 from huobi.rest.endpoint import Endpoint

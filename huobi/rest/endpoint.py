@@ -119,6 +119,13 @@ class Endpoint(object):
                         f'{param_value} is not a'
                         f'valid value for {param_name} \n'
                         f'Choices are {choices}')
+                required_type = param_spec.get('type')
+                if required_type and not isinstance(param_value, required_type):
+                    raise HuobiRestArgumentError(
+                        f'{param_name} should be of instance of {required_type}'
+                        f'but got {type(param_name)}'
+                    )
+
                 if param_name is not None:
                     url_replace = param_spec.get('url')
                     if url_replace:
@@ -126,7 +133,8 @@ class Endpoint(object):
                             '{' + url_replace + '}', str(param_value)
                         )
                     else:
-                        query_params[param_name] = param_value
+                        name = param_spec.get('name', param_name)
+                        query_params[name] = param_value
 
             url = f'{instance.base_url}{self.path}'
             res = None
@@ -142,7 +150,7 @@ class Endpoint(object):
                 try:
                     res = instance.session.post(
                         url,
-                        body=kwargs['body'],
+                        json=query_params,
                         headers=REQUIRED_POST_HEADERS
                     )
                 except Exception as exc:
