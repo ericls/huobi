@@ -1,8 +1,18 @@
 """
 class of Huobi restful api client, order related endpoints
 """
+import datetime
 from huobi.rest.endpoints import HuobiRestClientBase
 from huobi.rest.endpoint import Endpoint
+
+
+def date_formatter(d):
+    if isinstance(d, datetime.datetime):
+        return d.date().isoformat()
+    if isinstance(d, datetime.date):
+        return d.isoformat()
+    if isinstance(d, str):
+        return d
 
 
 class HuobiRestClientOrder(HuobiRestClientBase):
@@ -66,7 +76,7 @@ class HuobiRestClientOrder(HuobiRestClientBase):
     )
 
     status = Endpoint(
-        method='GEt',
+        method='GET',
         path='/v1/order/orders/{order-id}',
         auth_required=True,
         params={
@@ -78,13 +88,119 @@ class HuobiRestClientOrder(HuobiRestClientBase):
     )
 
     matchresults = Endpoint(
-        method='GEt',
+        method='GET',
         path='/v1/order/orders/{order-id}',
         auth_required=True,
         params={
             'order_id': {
                 'required': True,
                 'url': 'order-id'
+            }
+        }
+    )
+
+    orders = list_orders = Endpoint(
+        method='GET',
+        path='/v1/order/orders',
+        auth_required=True,
+        params={
+            'symbol': {
+                'required': True,
+            },
+            'types': {
+                'required': False,
+                'multiple': True,
+                'choices': [
+                    'buy-market',
+                    'sell-market',
+                    'buy-limit',
+                    'sell-limit',
+                ]
+            },
+            'start_date': {
+                'required': False,
+                'formatter': date_formatter
+            },
+            'end_date': {
+                'required': False,
+                'formatter': date_formatter
+            },
+            'states': {
+                'required': True,
+                'choices': [
+                    'pre-submitted',
+                    'submitted',
+                    'partial-filled',
+                    'partial-canceled',
+                    'filled',
+                    'canceled',
+                ]
+            },
+            'from': {
+                'required': False,
+            },
+            'direct': {
+                'required': False,
+                'choices': [
+                    'prev',
+                    'next'
+                ]
+            },
+            'size': {
+                'required': False,
+            }
+        }
+    )
+
+    list_matchresults = Endpoint(
+        method='GET',
+        path='/v1/order/matchresults',
+        auth_required=True,
+        params={
+            'symbol': {
+                'required': True,
+            },
+            'types': {
+                'required': False,
+                'multiple': True,
+                'choices': [
+                    'buy-market',
+                    'sell-market',
+                    'buy-limit',
+                    'sell-limit',
+                ]
+            },
+            'start_date': {
+                'required': False,
+                'formatter': date_formatter
+            },
+            'end_date': {
+                'required': False,
+                'formatter': date_formatter
+            },
+            'states': {
+                'required': True,
+                'choices': [
+                    'pre-submitted',
+                    'submitted',
+                    'partial-filled',
+                    'partial-canceled',
+                    'filled',
+                    'canceled',
+                ]
+            },
+            'from': {
+                'required': False,
+            },
+            'direct': {
+                'required': False,
+                'choices': [
+                    'prev',
+                    'next'
+                ]
+            },
+            'size': {
+                'required': False,
             }
         }
     )

@@ -104,6 +104,7 @@ class Endpoint(object):
             for param_name, param_spec in self.params.items():
                 required = param_spec.get('required', False)
                 choices = param_spec.get('choices', None)
+                multiple = param_spec.get('multiple', False)
                 if required and (
                         'default' not in param_spec
                 ) and not kwargs.get(param_name):
@@ -114,18 +115,26 @@ class Endpoint(object):
                     param_name,
                     param_spec.get('default')
                 )
-                if choices and param_value and param_value not in choices:
-                    raise HuobiRestArgumentError(
-                        f'{param_value} is not a'
-                        f'valid value for {param_name} \n'
-                        f'Choices are {choices}')
+                formatter = param_spec.get('formatter')
+                if formatter:
+                    param_value = formatter(param_value)
+                if choices and param_value:
+                    if param_value not in choices and not multiple:
+                        raise HuobiRestArgumentError(
+                            f'{param_value} is not a'
+                            f'valid value for {param_name} \n'
+                            f'Choices are {choices}')
+                    if multiple and not all([part in choices for part in param_value.split(',')]):
+                        raise HuobiRestArgumentError(
+                            f'{param_value} contains'
+                            f'invalid value for {param_name} \n'
+                            f'Choices are {choices}')
                 required_type = param_spec.get('type')
                 if required_type and not isinstance(param_value, required_type):
                     raise HuobiRestArgumentError(
                         f'{param_name} should be of instance of {required_type}'
                         f'but got {type(param_name)}'
                     )
-
                 if param_name is not None:
                     url_replace = param_spec.get('url')
                     if url_replace:
