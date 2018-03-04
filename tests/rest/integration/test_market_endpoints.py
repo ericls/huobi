@@ -5,7 +5,7 @@ import unittest
 from huobi.rest.client import HuobiRestClient
 from huobi.rest.error import (
     HuobiRestiApiError,
-    HuobiRestRequstError,
+    HuobiRestRequestError,
     HuobiRestArgumentError,
 )
 
@@ -26,7 +26,7 @@ class TestMarketDataCommon(TestMarketDataEndpoint):
             access_key="1",
             secret_key="1",
             base_url='https://api.huobi.jfkdlsajfdklsa')
-        with self.assertRaises(HuobiRestRequstError):
+        with self.assertRaises(HuobiRestRequestError):
             client.market_history_kline(
                 symbol="btcusdt",
                 period="1day",

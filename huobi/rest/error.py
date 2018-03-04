@@ -10,7 +10,7 @@ class HuobiRestError(Exception):
     pass
 
 
-class HuobiRestRequstError(HuobiRestError):
+class HuobiRestRequestError(HuobiRestError):
     """
     Huobi rest client request exceptions
     """

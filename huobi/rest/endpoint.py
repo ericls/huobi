@@ -6,7 +6,7 @@ from urllib.parse import urlparse, parse_qsl, urlencode
 from huobi.rest.helper import REQUIRED_HEADERS, REQUIRED_POST_HEADERS
 from huobi.rest.error import (
     HuobiRestError,
-    HuobiRestRequstError,
+    HuobiRestRequestError,
     HuobiRestiApiError,
     HuobiRestArgumentError,
     HuobiRestApiDecodeError
@@ -104,7 +104,7 @@ class Endpoint(object):
         try:
             res.raise_for_status
         except Exception as exc:
-            raise HuobiRestRequstError('Request Error') from exc
+            raise HuobiRestRequestError('Request Error') from exc
         try:
             json_data = res.json()
         except Exception as exc:
@@ -180,7 +180,7 @@ class Endpoint(object):
                 try:
                     res = instance.session.get(url, headers=REQUIRED_HEADERS)
                 except Exception as exc:
-                    raise HuobiRestRequstError('Request error') from exc
+                    raise HuobiRestRequestError('Request error') from exc
             if self.method.lower() == 'post':
                 url = self._sign_url(instance, 'POST', url)
                 try:
@@ -190,7 +190,7 @@ class Endpoint(object):
                         headers=REQUIRED_POST_HEADERS
                     )
                 except Exception as exc:
-                    raise HuobiRestRequstError('Request error') from exc
+                    raise HuobiRestRequestError('Request error') from exc
 
             return self._handle_response(instance, res)
 

@@ -38,7 +38,7 @@ class TestCommonSymbols(TestCommonEndpoint):
             secret_key='2',
         )
         with self.assertRaises(HuobiRestiApiError):
-            client.symbols()
+            client.accounts()
 
 
 class TestCommonCurrencies(TestCommonEndpoint):
