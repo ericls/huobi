@@ -13,7 +13,7 @@ class HuobiRestClientCommon(HuobiRestClientBase):
     symbols = Endpoint(
         method='GET',
         path='/v1/common/symbols',
-        auth_required=True,
+        auth_required=False,
     )
 
     currencys = currencies = Endpoint(
@@ -24,5 +24,5 @@ class HuobiRestClientCommon(HuobiRestClientBase):
     timestamp = Endpoint(
         method='GET',
         path='/v1/common/timestamp',
-        auth_required=True,
+        auth_required=False,
     )

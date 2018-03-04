@@ -14,9 +14,14 @@ class HuobiRestClientBaseMeta(type):
             name,
             bases,
             attrs)
-        for attr, obj in attrs.items():
-            if isinstance(obj, Endpoint):
-                obj.__set_name__(cls, attr)
+        endpoints = {
+            attr: obj
+            for attr, obj in attrs.items()
+            if isinstance(obj, Endpoint)
+        }
+        for attr, obj in endpoints.items():
+            obj.__set_name__(cls, attr)
+            obj.__doc__ = obj._generate_docs()
         return cls
 
 

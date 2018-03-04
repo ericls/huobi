@@ -73,6 +73,33 @@ class Endpoint(object):
         return new_url
 
     @staticmethod
+    def _generate_param_docs(param_name, param_config):
+        choices = param_config.get('choices', [])
+        if len(choices) > 20:
+            start = ",".join(map(str, choices[:10]))
+            end = ",".join(map(str, choices[-10:]))
+            choices = f'[{start},...,{end}]'
+        lines = [
+            f'  * *{param_name}*',
+            f'      this keyword argument takes a list of values \n' if param_config.get('multiple') else '',
+            f'      :required: {param_config.get("required", False)}',
+            f"      :default: {param_config['default']}" if 'default' in param_config else '',
+            f"      :choices: {choices}" if 'choices' in param_config else '',
+        ]
+        return '\n'.join([line for line in lines if line])
+
+    def _generate_docs(self):
+        param_docs = '\n'.join([
+            self._generate_param_docs(k, v)
+            for k, v in self.params.items()
+        ])
+        doc = [
+            ":param \**kwargs:\n  See blow\n :Keyword Arguments:" if self.params else "This method does not require arguments",
+            f'{param_docs}',
+        ]
+        return '\n'.join(doc)
+
+    @staticmethod
     def _handle_response(_instance, res):
         try:
             res.raise_for_status
@@ -94,12 +121,12 @@ class Endpoint(object):
         return HuobiRestEndpointResult(res.request, res, json_data)
 
     def __get__(self, instance, owner):
-        if self.auth_required and (
-                not instance.secret_key or not instance.access_key):
-            raise HuobiRestError(
-                f'Authentication is required for method: {self.attr_name}')
 
         def _wrapper(**kwargs):
+            if self.auth_required and (
+                    not instance.secret_key or not instance.access_key):
+                raise HuobiRestError(
+                    f'Authentication is required for method: {self.attr_name}')
             query_params = {}
             for param_name, param_spec in self.params.items():
                 required = param_spec.get('required', False)
@@ -168,5 +195,6 @@ class Endpoint(object):
             return self._handle_response(instance, res)
 
         _wrapper.__name__ = self.attr_name
+        _wrapper.__doc__ = self._generate_docs()
 
         return _wrapper
