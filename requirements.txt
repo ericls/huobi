@@ -4,8 +4,14 @@
 #
 #    pip-compile --output-file requirements.txt requirements.ini
 #
+aiohttp==3.1.1
+async-timeout==2.0.1      # via aiohttp
+attrs==17.4.0             # via aiohttp
 certifi==2017.11.5        # via requests
-chardet==3.0.4            # via requests
-idna==2.6                 # via requests
+chardet==3.0.4            # via aiohttp, requests
+idna-ssl==1.0.1           # via aiohttp
+idna==2.6                 # via idna-ssl, requests, yarl
+multidict==4.1.0          # via aiohttp, yarl
 requests==2.18.4
 urllib3==1.22             # via requests
+yarl==1.1.1               # via aiohttp

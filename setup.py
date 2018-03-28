@@ -8,7 +8,7 @@ except(IOError, ImportError):
 
 setup(
     name='huobi',
-    version='0.1.5',
+    version='0.1.9',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     include_package_data=True,
     license='MIT License',
@@ -19,6 +19,7 @@ setup(
     author_email='dustet@gmail.com',
     install_requires=[
         "requests>=2.4.2",
+        "aiohttp>=3.1.0",
     ],
     classifiers=[
         'Intended Audience :: Developers',
