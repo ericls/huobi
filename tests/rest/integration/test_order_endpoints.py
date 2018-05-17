@@ -1,8 +1,8 @@
 import unittest
+import os
 from huobi.rest.client import HuobiRestClient
 from huobi.rest.error import HuobiRestiApiError
 
-import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 
@@ -16,7 +16,8 @@ class TestOrderEndpoints(unittest.TestCase):
         access_key = os.environ['ACCESS_KEY']
         secret_key = os.environ['SECRET_KEY']
         self.client = HuobiRestClient(
-            access_key=access_key, secret_key=secret_key)
+            access_key=access_key, secret_key=secret_key
+        )
 
     def tearDown(self):
         self.client.close()
@@ -36,5 +37,3 @@ class TestOrdersE2E(TestOrderEndpoints):
                 price='1',
                 type='buy-limit'
             )
-
-

@@ -102,7 +102,8 @@ class Endpoint(object):
     @staticmethod
     def _handle_response(_instance, res):
         try:
-            res.raise_for_status
+            if res.status_code >= 500:
+                res.raise_for_status()
         except Exception as exc:
             raise HuobiRestRequestError('Request Error') from exc
         try:
@@ -128,6 +129,7 @@ class Endpoint(object):
                 raise HuobiRestError(
                     f'Authentication is required for method: {self.attr_name}')
             query_params = {}
+            path = self.path
             for param_name, param_spec in self.params.items():
                 required = param_spec.get('required', False)
                 choices = param_spec.get('choices', None)
@@ -165,14 +167,14 @@ class Endpoint(object):
                 if param_name is not None:
                     url_replace = param_spec.get('url')
                     if url_replace:
-                        self.path = self.path.replace(
+                        path = path.replace(
                             '{' + url_replace + '}', str(param_value)
                         )
                     else:
                         name = param_spec.get('name', param_name)
                         query_params[name] = param_value
 
-            url = f'{instance.base_url}{self.path}'
+            url = f'{instance.base_url}{path}'
             res = None
             if self.method.lower() == 'get':
                 url = f'{url}?{urlencode(query_params)}'
