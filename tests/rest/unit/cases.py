@@ -7,8 +7,8 @@ class MockedTestCase(TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.mocked_respnse = {'status': 'ok', 'data': {}}
-        self.mocked_respnse_status_code = 200
+        self.mocked_response = {'status': 'ok', 'data': {}}
+        self.mocked_response_status_code = 200
 
     def setUp(self):
         access_key = 'foo'
@@ -17,7 +17,7 @@ class MockedTestCase(TestCase):
             access_key=access_key, secret_key=secret_key
         )
         self.client.session = self._get_mock_session()
-        self.history = []
+        self.history = {}
         self.last_url = ''
 
     def tearDown(self):
@@ -31,14 +31,14 @@ class MockedTestCase(TestCase):
         def mocked_request_method(url='', **kwargs):
             url = url or kwargs.get('url')
             self.last_url = url
-            self.history.append(url)
+            self.history[url] = kwargs
             response = mock.Mock()
             response.raise_for_status = mock.Mock()
-            if self.mocked_respnse_status_code > 300:
+            if self.mocked_response_status_code > 300:
                 response.raise_for_status.side_effect = raise_exception
-            response.status_code = self.mocked_respnse_status_code
+            response.status_code = self.mocked_response_status_code
             response.json = mock.Mock()
-            response.json.return_value = self.mocked_respnse
+            response.json.return_value = self.mocked_response
             return response
 
         session = mock.Mock()

@@ -182,7 +182,7 @@ class Endpoint(object):
                         f'{param_name} should be of instance of {required_type}'
                         f'but got {type(param_name)}'
                     )
-                if param_name is not None:
+                if param_value is not None:
                     url_replace = param_spec.get('url')
                     if url_replace:
                         path = path.replace(
