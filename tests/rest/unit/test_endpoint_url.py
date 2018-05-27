@@ -1,4 +1,3 @@
-
 from .cases import MockedTestCase
 
 class TestEndpointUrls(MockedTestCase):

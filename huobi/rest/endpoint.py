@@ -2,6 +2,7 @@
 """
 from datetime import datetime
 from urllib.parse import urlparse, parse_qsl, urlencode
+from inspect import Signature, Parameter
 
 from huobi.rest.helper import REQUIRED_HEADERS, REQUIRED_POST_HEADERS
 from huobi.rest.error import (
@@ -82,7 +83,7 @@ class Endpoint(object):
         lines = [
             f'  * *{param_name}*',
             f'      this keyword argument takes a list of values \n' if param_config.get('multiple') else '',
-            f'      :required: {param_config.get("required", False)}',
+            f'      :required by Huobi: {param_config.get("required", False)}',
             f"      :default: {param_config['default']}" if 'default' in param_config else '',
             f"      :choices: {choices}" if 'choices' in param_config else '',
         ]
@@ -94,7 +95,8 @@ class Endpoint(object):
             for k, v in self.params.items()
         ])
         doc = [
-            ":param \**kwargs:\n  See blow\n :Keyword Arguments:" if self.params else "This method does not require arguments",
+            ":param \**kwargs:\n  See blow\n :Keyword Arguments:"
+            if self.params else "This method does not require arguments",
             f'{param_docs}',
         ]
         return '\n'.join(doc)
@@ -121,8 +123,24 @@ class Endpoint(object):
 
         return HuobiRestEndpointResult(res.request, res, json_data)
 
+    def _get_signature(self):
+        parameters = []
+        for param_name, param_spec in self.params.items():
+            param = Parameter(
+                name=param_name,
+                kind=Parameter.KEYWORD_ONLY,
+                default=(param_spec.get('default') or Parameter.empty) if param_spec.get('required') else None,
+            )
+            parameters.append(param)
+        return Signature(parameters=parameters)
+
+    def _with_signature(self, func):
+        func.__signature__ = self._get_signature()
+        return func
+
     def __get__(self, instance, owner):
 
+        @self._with_signature
         def _wrapper(**kwargs):
             if self.auth_required and (
                     not instance.secret_key or not instance.access_key):
