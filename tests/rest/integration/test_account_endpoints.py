@@ -21,6 +21,26 @@ class TestAccountEndpoint(unittest.TestCase):
         self.client.close()
 
 
+class TestAccountStoreAccounts(unittest.TestCase):
+
+    def setUp(self):
+        access_key = os.environ['ACCESS_KEY']
+        secret_key = os.environ['SECRET_KEY']
+        self.client = HuobiRestClient(
+            access_key=access_key,
+            secret_key=secret_key,
+            store_accounts=True
+        )
+
+    def tearDown(self):
+        self.client.close()
+
+    def test_success(self):
+        self.assertIsNotNone(self.client.spot_account_id)
+        self.assertIsNotNone(self.client.margin_account_id)
+        self.assertIsNotNone(self.client.otc_account_id)
+
+
 class TestAccountAccounts(TestAccountEndpoint):
 
     def test_success(self):

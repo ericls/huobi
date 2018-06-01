@@ -34,10 +34,13 @@ class HuobiRestClientBase(object, metaclass=HuobiRestClientBaseMeta):
             self,
             access_key=None,
             secret_key=None,
-            base_url='https://api.huobi.pro'):
+            base_url='https://api.huobi.pro',
+            store_accounts=False
+    ):
         self.access_key = access_key
         self.secret_key = secret_key
         self.base_url = base_url
+        self.store_accounts = store_accounts
         with Session() as session:
             self.session = session
 
