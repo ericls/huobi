@@ -168,6 +168,8 @@ class HuobiRestClientOrder(HuobiRestClientBase):
                     'sell-market',
                     'buy-limit',
                     'sell-limit',
+                    'buy-ioc',
+                    'sell-ioc',
                 ]
             },
             'start_date': {
@@ -177,17 +179,6 @@ class HuobiRestClientOrder(HuobiRestClientBase):
             'end_date': {
                 'required': False,
                 'formatter': date_formatter
-            },
-            'states': {
-                'required': True,
-                'choices': [
-                    'pre-submitted',
-                    'submitted',
-                    'partial-filled',
-                    'partial-canceled',
-                    'filled',
-                    'canceled',
-                ]
             },
             'from': {
                 'required': False,
