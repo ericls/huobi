@@ -6,12 +6,23 @@
 #
 aiohttp==3.1.1
 async-timeout==2.0.1      # via aiohttp
-attrs==17.4.0             # via aiohttp
+atomicwrites==1.1.5       # via pytest
+attrs==17.4.0             # via aiohttp, pytest
 certifi==2017.11.5        # via requests
 chardet==3.0.4            # via aiohttp, requests
+flake8==3.5.0
 idna-ssl==1.0.1           # via aiohttp
 idna==2.6                 # via idna-ssl, requests, yarl
+mccabe==0.6.1             # via flake8
+more-itertools==4.2.0     # via pytest
 multidict==4.1.0          # via aiohttp, yarl
+pluggy==0.6.0             # via pytest
+py==1.5.4                 # via pytest
+pycodestyle==2.3.1        # via flake8
+pyflakes==1.6.0           # via flake8
+pytest==3.6.3
+python-dotenv==0.8.2
 requests==2.18.4
+six==1.11.0               # via more-itertools, pytest
 urllib3==1.22             # via requests
 yarl==1.1.1               # via aiohttp

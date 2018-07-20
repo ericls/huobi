@@ -45,6 +45,7 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
+.pytest_cache/
 
 # Translations
 *.mo
@@ -105,9 +106,6 @@ venv.bak/
 
 # vscode
 .vscode
-
-# requirements
-requirements.ini
 
 # idea
 .idea/
