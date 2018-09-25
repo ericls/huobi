@@ -194,11 +194,16 @@ class Endpoint(object):
 
             url = f'{instance.base_url}{path}'
             res = None
+
             if self.method.lower() == 'get':
                 url = f'{url}?{urlencode(query_params)}'
                 url = self._sign_url(instance, 'GET', url)
                 try:
-                    res = instance.session.get(url, headers=REQUIRED_HEADERS)
+                    res = instance.session.get(
+                        url,
+                        headers=REQUIRED_HEADERS,
+                        **instance.request_params,
+                    )
                 except Exception as exc:
                     raise HuobiRestRequestError('Request error') from exc
             if self.method.lower() == 'post':
@@ -207,7 +212,8 @@ class Endpoint(object):
                     res = instance.session.post(
                         url,
                         json=query_params,
-                        headers=REQUIRED_POST_HEADERS
+                        headers=REQUIRED_POST_HEADERS,
+                        **instance.request_params,
                     )
                 except Exception as exc:
                     raise HuobiRestRequestError('Request error') from exc

@@ -8,7 +8,7 @@ except(IOError, ImportError):
 
 setup(
     name='huobi',
-    version='0.1.11',
+    version='0.1.12',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     include_package_data=True,
     license='MIT License',
@@ -30,4 +30,8 @@ setup(
         "Programming Language :: Python :: 3.7",
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
+    extras_require={
+        'socks': ['PySocks>=1.5.6, !=1.5.7'],
+        'socks:sys_platform == "win32" and (python_version == "2.7" or python_version == "2.6")': ['win_inet_pton'],
+    },
 )

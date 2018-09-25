@@ -34,11 +34,16 @@ class HuobiRestClientBase(object, metaclass=HuobiRestClientBaseMeta):
             self,
             access_key=None,
             secret_key=None,
-            base_url='https://api.huobi.pro'):
+            base_url='https://api.huobi.pro',
+            session_params=None,
+            request_params=None
+    ):
         self.access_key = access_key
         self.secret_key = secret_key
         self.base_url = base_url
-        with Session() as session:
+        session_params = session_params or {}
+        self.request_params = request_params or {}
+        with Session(**session_params) as session:
             self.session = session
 
     def close(self):
