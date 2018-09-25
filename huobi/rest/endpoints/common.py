@@ -26,3 +26,23 @@ class HuobiRestClientCommon(HuobiRestClientBase):
         path='/v1/common/timestamp',
         auth_required=False,
     )
+
+    deposit_withdraw = Endpoint(
+        method='GET',
+        path='/v1/query/deposit-withdraw',
+        params={
+            'currency': {
+                'required': True
+            },
+            'type': {
+                'required': True,
+                'choices': ['deposit', 'withdraw']
+            },
+            'from': {
+                'default': 0,
+            },
+            'size': {
+                'default': 100,
+            }
+        }
+    )
